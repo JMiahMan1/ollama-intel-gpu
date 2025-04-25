@@ -4,7 +4,7 @@ ENV TZ=america/los_angeles
 
 
 # Base packages
-RUN apt update && \
+RUN apt-get update && \
     apt install --no-install-recommends -q -y \
     software-properties-common \
     ca-certificates \
@@ -24,12 +24,12 @@ RUN mkdir -p /tmp/gpu && \
  rm *.deb
 
 # Install Ollama Portable Zip
-ARG IPEXLLM_RELEASE_REPO=intel/ipex-llm
+ARG IPEXLLM_RELEASE_REPO=ipex-llm/ipex-llm
 ARG IPEXLLM_RELEASE_VERSON=v2.2.0
 ARG IPEXLLM_PORTABLE_ZIP_FILENAME=ollama-ipex-llm-2.2.0-ubuntu.tgz
 RUN cd / && \
   wget https://github.com/${IPEXLLM_RELEASE_REPO}/releases/download/${IPEXLLM_RELEASE_VERSON}/${IPEXLLM_PORTABLE_ZIP_FILENAME} && \
-  tar xvf ${IPEXLLM_PORTABLE_ZIP_FILENAME} --strip-components=1 -C /
+  tar xavf ${IPEXLLM_PORTABLE_ZIP_FILENAME} --strip-components=1 -C /
 
 ENV OLLAMA_HOST=0.0.0.0:11434
 

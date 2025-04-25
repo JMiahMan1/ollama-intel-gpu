@@ -4,15 +4,17 @@ services:
       context: .
       dockerfile: Dockerfile
       args:
-        IPEXLLM_RELEASE_REPO: intel/ipex-llm
-        IPEXLLM_RELEASE_VERSON: v2.2.0
-        IPEXLLM_PORTABLE_ZIP_FILENAME: ollama-ipex-llm-2.2.0-ubuntu.tar.gz
+        IPEXLLM_RELEASE_REPO: ipex-llm/ipex-llm
+        IPEXLLM_RELEASE_VERSON: v2.3.0-nightly
+        IPEXLLM_PORTABLE_ZIP_FILENAME: ollama-ipex-llm-2.3.0b20250415-ubuntu.tgz
     container_name: ollama-intel-gpu
     restart: always
+    ports:
+      - "11434:11434"
     devices:
       - /dev/dri:/dev/dri
     volumes:
-      - ollama-intel-gpu:/root/.ollama
+      - ollama-local:/root/.ollama
     environment:
       - ONEAPI_DEVICE_SELECTOR=level_zero:0
       - IPEX_LLM_NUM_CTX=16384
@@ -20,7 +22,7 @@ services:
     image: ghcr.io/open-webui/open-webui
     container_name: ollama-webui
     volumes:
-      - ollama-webui:/app/backend/data
+      - open-webui-local:/app/backend/data
     depends_on:
       - ollama-intel-gpu
     ports:
@@ -31,5 +33,7 @@ services:
       - host.docker.internal:host-gateway
     restart: unless-stopped
 volumes:
-  ollama-webui: {}
-  ollama-intel-gpu: {}
+  ollama-local:
+    external: true
+  open-webui-local:
+    external: true
